@@ -31,5 +31,17 @@ def get_data_by_note():
     return jsonify(r.json())
 
 
+@app.route("/comment", methods=["GET"])
+def get_comment_by_note():
+    note_id = request.args.get('note_id')
+    url = base_url + '/api/storage/comment'
+    data = {
+        'note_id': note_id
+    }
+    r = requests.get(url, params=data)
+    print(r.json())
+    return jsonify(r.json())
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
