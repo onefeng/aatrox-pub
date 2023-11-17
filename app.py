@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
 
-"""
-@author: onefeng
-@time: 2023/11/17 9:59
-"""
-
-# -*- coding: utf-8 -*-
 
 """
 @author: onefeng
 @time: 2023/11/15 18:24
 """
+import json
 from flask import Flask, request, jsonify
 import requests
 
@@ -27,7 +22,6 @@ def get_data_by_note():
         'note_id': note_id
     }
     r = requests.get(url, params=data)
-    # print(r.json())
     return jsonify(r.json())
 
 
@@ -39,8 +33,19 @@ def get_comment_by_note():
         'note_id': note_id
     }
     r = requests.get(url, params=data)
-    # print(r.json())
     return jsonify(r.json())
+
+
+@app.route("/static", methods=["GET"])
+def write_text_json():
+    filename = request.args.get('filename')
+    try:
+        with open(f'data/{filename}', 'r', encoding='utf-8') as f:
+            data = f.read()
+        return jsonify(json.loads(data))
+    except Exception as e:
+        print(e)
+        return None
 
 
 if __name__ == '__main__':
