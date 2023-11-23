@@ -6,12 +6,18 @@
 @time: 2023/11/15 18:24
 """
 import json
+import os
 from flask import Flask, request, jsonify
 import requests
 
 app = Flask(__name__)
 
 base_url = 'http://1.15.182.65:20004/'
+
+token = os.getenv('token')
+headers = {
+    'Authorization': f'bearer {token}'
+}
 
 
 @app.route("/note", methods=["GET"])
@@ -33,6 +39,17 @@ def get_comment_by_note():
         'note_id': note_id
     }
     r = requests.get(url, params=data)
+    return jsonify(r.json())
+
+
+@app.route("/keywords", methods=["GET"])
+def get_comment_by_note():
+    keywords = request.args.get('keywords')
+    url = base_url + 'api/storage/keywords'
+    data = {
+        'keywords': keywords
+    }
+    r = requests.get(url, params=data, headers=headers)
     return jsonify(r.json())
 
 
