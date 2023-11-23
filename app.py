@@ -43,7 +43,7 @@ def get_comment_by_note():
 
 
 @app.route("/keywords", methods=["GET"])
-def get_comment_by_note():
+def get_comment_by_keywords():
     keywords = request.args.get('keywords')
     url = base_url + 'api/storage/keywords'
     data = {
