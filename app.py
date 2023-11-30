@@ -12,7 +12,7 @@ import requests
 
 app = Flask(__name__)
 
-base_url = 'http://1.15.182.65:20004/'
+base_url = 'http://1.15.182.65:20005/'
 
 token = os.getenv('token')
 headers = {
@@ -27,7 +27,7 @@ def get_data_by_note():
     data = {
         'note_id': note_id
     }
-    r = requests.get(url, params=data)
+    r = requests.get(url, params=data, headers=headers)
     return jsonify(r.json())
 
 
@@ -38,7 +38,7 @@ def get_comment_by_note():
     data = {
         'note_id': note_id
     }
-    r = requests.get(url, params=data)
+    r = requests.get(url, params=data, headers=headers)
     return jsonify(r.json())
 
 
