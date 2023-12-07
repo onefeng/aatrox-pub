@@ -45,11 +45,11 @@ def get_comment_by_note():
 @app.route("/keywords", methods=["GET"])
 def get_comment_by_keywords():
     keywords = request.args.get('keywords')
-    count = request.args.get('count')
+    limit = request.args.get('limit')
     url = base_url + 'api/storage/keywords'
     data = {
         'keywords': keywords,
-        'limit': count
+        'limit': limit
     }
     r = requests.get(url, params=data, headers=headers)
     return jsonify(r.json())
