@@ -7,7 +7,7 @@
 """
 import json
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 import requests
 
 app = Flask(__name__)
@@ -20,8 +20,41 @@ headers = {
 }
 
 
+def api_jsonify(code, message, data=None):
+    if data is None:
+        return jsonify({
+            'code': code,
+            'message': message
+        })
+    return jsonify({
+        'code': code,
+        'message': message,
+        'data': data
+    })
+
+
+def get_token():
+    authorization = request.headers.get('Authorization')
+    if authorization:
+        try:
+            token_type, _token = authorization.split(None, 1)
+            if token_type.lower() != 'bearer':
+                # if error, exit and return error msg
+                abort(api_jsonify(400, 'token must be bearer'))
+            if _token != token:
+                abort(api_jsonify(400, 'token err'))
+            return token_type, token
+        except ValueError:
+            # if error, exit and return error msg
+            abort(api_jsonify(400, 'authorization format error'))
+    else:
+        # if error, exit and return error msg
+        abort(api_jsonify(400, 'can not find token in request head'))
+
+
 @app.route("/note", methods=["GET"])
 def get_data_by_note():
+    get_token()
     note_id = request.args.get('note_id')
     url = base_url + '/api/storage/note'
     data = {
@@ -33,6 +66,7 @@ def get_data_by_note():
 
 @app.route("/comment", methods=["GET"])
 def get_comment_by_note():
+    get_token()
     note_id = request.args.get('note_id')
     url = base_url + 'api/storage/comment'
     data = {
@@ -44,6 +78,7 @@ def get_comment_by_note():
 
 @app.route("/keywords", methods=["GET"])
 def get_comment_by_keywords():
+    get_token()
     keywords = request.args.get('keywords')
     limit = request.args.get('limit')
     url = base_url + 'api/storage/keywords'
@@ -57,6 +92,7 @@ def get_comment_by_keywords():
 
 @app.route("/static", methods=["GET"])
 def write_text_json():
+    get_token()
     filename = request.args.get('filename')
     try:
         with open(f'data/{filename}', 'r', encoding='utf-8') as f:
