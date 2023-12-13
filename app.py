@@ -54,7 +54,7 @@ def get_token():
 
 @app.route("/note", methods=["GET"])
 def get_data_by_note():
-    get_token()
+    # get_token()
     note_id = request.args.get('note_id')
     url = base_url + '/api/storage/note'
     data = {
@@ -66,7 +66,7 @@ def get_data_by_note():
 
 @app.route("/comment", methods=["GET"])
 def get_comment_by_note():
-    get_token()
+    # get_token()
     note_id = request.args.get('note_id')
     url = base_url + 'api/storage/comment'
     data = {
@@ -78,7 +78,7 @@ def get_comment_by_note():
 
 @app.route("/keywords", methods=["GET"])
 def get_comment_by_keywords():
-    get_token()
+    # get_token()
     keywords = request.args.get('keywords')
     limit = request.args.get('limit')
     url = base_url + 'api/storage/keywords'
@@ -92,7 +92,7 @@ def get_comment_by_keywords():
 
 @app.route("/static", methods=["GET"])
 def write_text_json():
-    get_token()
+    # get_token()
     filename = request.args.get('filename')
     try:
         with open(f'data/{filename}', 'r', encoding='utf-8') as f:
