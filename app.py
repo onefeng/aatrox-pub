@@ -90,18 +90,5 @@ def get_comment_by_keywords():
     return jsonify(r.json())
 
 
-@app.route("/static", methods=["GET"])
-def write_text_json():
-    # get_token()
-    filename = request.args.get('filename')
-    try:
-        with open(f'data/{filename}', 'r', encoding='utf-8') as f:
-            data = f.read()
-        return jsonify(json.loads(data))
-    except Exception as e:
-        print(e)
-        return None
-
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
